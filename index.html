@@ -383,6 +383,296 @@
     .hidden { display: none !important; }
 
 
+    /* Intro loading screen: atomic model simulation splash */
+    body.intro-active {
+      overflow: hidden;
+    }
+
+    .intro-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 3000;
+      display: grid;
+      place-items: center;
+      padding: 1.2rem;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(56,189,248,.22), transparent 32%),
+        radial-gradient(circle at 75% 70%, rgba(167,139,250,.18), transparent 34%),
+        linear-gradient(135deg, #020617 0%, #0f172a 52%, #111827 100%);
+      color: var(--text);
+      transition: opacity .45s ease, visibility .45s ease;
+    }
+
+    .intro-loader.hide {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .intro-card {
+      width: min(720px, calc(100vw - 2rem));
+      min-height: 520px;
+      display: grid;
+      place-items: center;
+      gap: 1rem;
+      text-align: center;
+      padding: 2rem 1.2rem;
+      border: 1px solid rgba(148, 163, 184, .28);
+      border-radius: 2rem;
+      background: rgba(15, 23, 42, .56);
+      box-shadow: 0 28px 70px rgba(0,0,0,.45);
+      backdrop-filter: blur(12px);
+    }
+
+    .intro-atom {
+      position: relative;
+      width: min(370px, 74vw);
+      aspect-ratio: 1;
+      margin: .45rem auto 0;
+      filter: drop-shadow(0 18px 28px rgba(56,189,248,.14));
+      isolation: isolate;
+    }
+
+    .intro-orbit {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 330px;
+      height: 126px;
+      margin-left: -165px;
+      margin-top: -63px;
+      border: 6px solid rgba(226, 232, 240, .86);
+      border-radius: 50%;
+      transform-origin: 50% 50%;
+      box-shadow: 0 0 16px rgba(226,232,240,.08);
+      z-index: 3;
+    }
+
+    .intro-orbit-horizontal { transform: rotate(0deg); }
+    .intro-orbit-diag-a { transform: rotate(56deg); }
+    .intro-orbit-diag-b { transform: rotate(-56deg); }
+
+    .intro-electron-path {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 330px;
+      height: 330px;
+      margin-left: -165px;
+      margin-top: -165px;
+      transform: rotate(var(--electron-angle));
+      transform-origin: 50% 50%;
+      z-index: 10;
+      animation: introElectronDepth var(--electron-duration) linear infinite;
+      animation-delay: var(--electron-delay);
+    }
+
+    .intro-path-horizontal {
+      --electron-angle: 0deg;
+      --electron-duration: 3.2s;
+      --electron-delay: 0s;
+    }
+
+    .intro-path-diag-a {
+      --electron-angle: 56deg;
+      --electron-duration: 3.8s;
+      --electron-delay: -1.15s;
+    }
+
+    .intro-path-diag-b {
+      --electron-angle: -56deg;
+      --electron-duration: 4.4s;
+      --electron-delay: -2.1s;
+    }
+
+    .intro-electron-plane {
+      position: absolute;
+      inset: 0;
+      transform: scaleY(.382);
+      transform-origin: 50% 50%;
+    }
+
+    .intro-electron-spin {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 0;
+      height: 0;
+      transform-origin: 0 0;
+      animation: introElectronSpin var(--electron-duration) linear infinite;
+      animation-delay: var(--electron-delay);
+    }
+
+    .intro-electron {
+      position: absolute;
+      left: 165px;
+      top: 0;
+      width: 26px;
+      height: 26px;
+      transform: translate(-50%, -50%) scaleY(2.62);
+      transform-origin: 50% 50%;
+    }
+
+    .intro-electron-dot {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 35% 30%, rgba(255,255,255,.36), transparent 22%),
+        linear-gradient(135deg, #5eead4 0%, #22d3ee 48%, #2563eb 100%);
+      box-shadow:
+        inset -3px -4px 0 rgba(14, 116, 144, .22),
+        0 0 0 5px rgba(45, 212, 191, .10),
+        0 0 22px rgba(45, 212, 191, .34);
+    }
+
+    .intro-nucleus {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 70px;
+      height: 70px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 32% 28%, rgba(255,255,255,.34), transparent 24%),
+        linear-gradient(135deg, #fde68a 0%, #f59e0b 46%, #ea580c 100%);
+      box-shadow:
+        0 0 0 9px rgba(245, 158, 11, .12),
+        0 0 34px rgba(245, 158, 11, .34);
+      z-index: 7;
+    }
+
+    .intro-nucleus::after {
+      content: "";
+      position: absolute;
+      right: 10px;
+      top: 9px;
+      width: 26px;
+      height: 48px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.16);
+      transform: rotate(30deg);
+    }
+
+    @keyframes introElectronSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes introElectronDepth {
+      0%, 49% { z-index: 10; }
+      50%, 99% { z-index: 4; }
+      100% { z-index: 10; }
+    }
+
+    .intro-title {
+      margin: .4rem 0 0;
+      font-size: clamp(1.65rem, 4vw, 2.6rem);
+      line-height: 1.18;
+      color: var(--accent2);
+      letter-spacing: -.03em;
+    }
+
+    .intro-subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .intro-progress {
+      width: min(420px, 80vw);
+      height: 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, .22);
+      border: 1px solid rgba(148, 163, 184, .24);
+    }
+
+    .intro-progress-bar {
+      height: 100%;
+      width: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+      transform-origin: left center;
+      animation: introProgress 3.4s ease forwards;
+    }
+
+    @keyframes introProgress {
+      from { transform: scaleX(.05); }
+      to { transform: scaleX(1); }
+    }
+
+    .intro-skip {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 3001;
+      border-color: rgba(250, 204, 21, .72);
+      background: rgba(15, 23, 42, .82);
+      box-shadow: 0 14px 34px rgba(0,0,0,.34);
+      font-weight: 900;
+    }
+
+    .intro-skip:hover {
+      background: rgba(250, 204, 21, .20);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .intro-electron-spin,
+      .intro-electron-path,
+      .intro-progress-bar {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .intro-card {
+        min-height: 500px;
+        padding-top: 1.3rem;
+      }
+
+      .intro-atom {
+        width: min(310px, 78vw);
+      }
+
+      .intro-orbit {
+        width: 276px;
+        height: 106px;
+        margin-left: -138px;
+        margin-top: -53px;
+        border-width: 5px;
+      }
+
+      .intro-electron-path {
+        width: 276px;
+        height: 276px;
+        margin-left: -138px;
+        margin-top: -138px;
+      }
+
+      .intro-electron {
+        left: 138px;
+        width: 22px;
+        height: 22px;
+      }
+
+      .intro-nucleus {
+        width: 58px;
+        height: 58px;
+      }
+
+      .intro-skip {
+        left: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+      }
+    }
+
+
+
     /* Language selector */
     .language-panel {
       position: fixed;
@@ -492,7 +782,40 @@
     }
   </style>
 </head>
-<body>
+<body class="intro-active">
+
+  <div id="introLoader" class="intro-loader" role="dialog" aria-modal="true" aria-labelledby="introTitle" aria-describedby="introDesc">
+    <div class="intro-card">
+      <div class="intro-atom" aria-hidden="true">
+        <div class="intro-orbit intro-orbit-horizontal"></div>
+        <div class="intro-orbit intro-orbit-diag-a"></div>
+        <div class="intro-orbit intro-orbit-diag-b"></div>
+        <div class="intro-electron-path intro-path-horizontal">
+          <div class="intro-electron-plane">
+            <div class="intro-electron-spin"><span class="intro-electron"><span class="intro-electron-dot"></span></span></div>
+          </div>
+        </div>
+        <div class="intro-electron-path intro-path-diag-a">
+          <div class="intro-electron-plane">
+            <div class="intro-electron-spin"><span class="intro-electron"><span class="intro-electron-dot"></span></span></div>
+          </div>
+        </div>
+        <div class="intro-electron-path intro-path-diag-b">
+          <div class="intro-electron-plane">
+            <div class="intro-electron-spin"><span class="intro-electron"><span class="intro-electron-dot"></span></span></div>
+          </div>
+        </div>
+        <div class="intro-nucleus"></div>
+      </div>
+      <div>
+        <h1 id="introTitle" class="intro-title">원자모형 시뮬레이션</h1>
+        <p id="introDesc" class="intro-subtitle">원자핵과 전자의 모형을 불러오는 중입니다.</p>
+      </div>
+      <div class="intro-progress" aria-hidden="true"><div class="intro-progress-bar"></div></div>
+    </div>
+    <button id="introSkipBtn" class="intro-skip" type="button" aria-label="로딩 화면 건너뛰고 원자모형 시뮬레이션으로 이동">건너뛰기</button>
+  </div>
+
 
   <div class="language-panel" id="languagePanel" aria-label="언어 설정">
     <button id="langKoBtn" class="lang-btn active" type="button" aria-label="한국어로 보기" title="한국어"><span aria-hidden="true">🇰🇷</span><span class="lang-label">KR</span></button>
@@ -625,6 +948,39 @@
   </main>
 
   <script>
+
+    const introLoader = document.getElementById('introLoader');
+    const introSkipBtn = document.getElementById('introSkipBtn');
+    let introLoaderClosed = false;
+
+    function closeIntroLoader() {
+      if (!introLoader || introLoaderClosed) return;
+      introLoaderClosed = true;
+      document.body.classList.remove('intro-active');
+      introLoader.classList.add('hide');
+      introLoader.setAttribute('aria-hidden', 'true');
+
+      const target = document.getElementById('simulation');
+      window.setTimeout(() => {
+        if (introLoader && introLoader.parentNode) introLoader.parentNode.removeChild(introLoader);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          const simCanvas = document.getElementById('simCanvas');
+          if (simCanvas) simCanvas.focus({ preventScroll: true });
+        }
+      }, 460);
+    }
+
+    if (introSkipBtn) {
+      introSkipBtn.addEventListener('click', closeIntroLoader);
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeIntroLoader();
+    });
+
+    window.setTimeout(closeIntroLoader, 3600);
+
     const canvas = document.getElementById('simCanvas');
     const ctx = canvas.getContext('2d');
     const W = canvas.width;
